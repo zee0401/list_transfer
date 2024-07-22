@@ -2,40 +2,48 @@ import { useState } from "react";
 import "./App.css";
 import Action from "./components/Action";
 import ItemList from "./components/ItemList";
+import { intersection, not } from "./utils/utils";
 
 function App() {
-  const data = ["1", "2", "3", "4"];
+  const data = [1, 2, 3, 4];
   const [leftItems, setLeftItems] = useState(data);
   const [rightItems, setRightItems] = useState([]);
-  const [checkedItem, setCheckedItem] = useState([]);
+  const [checkedItems, setCheckedItems] = useState([]);
 
-  const handleChange = (list) => {
-    const currentIndex = checkedItem.indexOf(list);
-    const newCheckedItem = [...checkedItem];
+  const leftCheckedItems = intersection(leftItems, checkedItems);
+  const rightCheckedItems = intersection(rightItems, checkedItems);
+
+  const handleChange = (item) => {
+    const currentIndex = checkedItems.indexOf(item);
+    const newCheckedItems = [...checkedItems];
 
     if (currentIndex === -1) {
-      newCheckedItem.push(list);
+      newCheckedItems.push(item);
     } else {
-      newCheckedItem.splice(currentIndex, 1);
+      newCheckedItems.splice(currentIndex, 1);
     }
 
-    setCheckedItem(newCheckedItem);
+    setCheckedItems(newCheckedItems);
   };
-  console.log(checkedItem);
 
   const moveRight = () => {
-    setRightItems(checkedItem);
-    setLeftItems();
+    setRightItems(rightItems.concat(leftCheckedItems));
+    setLeftItems(not(leftItems, leftCheckedItems));
+    setCheckedItems(not(checkedItems, leftCheckedItems));
+    console.log(checkedItems);
   };
+
   const moveLeft = () => {
-    console.log("move Left");
+    setLeftItems(leftItems.concat(rightCheckedItems));
+    setRightItems(not(rightItems, rightCheckedItems));
+    setCheckedItems(not(checkedItems, rightCheckedItems));
   };
 
   return (
     <div className="container">
       <ItemList items={leftItems} handleChange={handleChange} />
       <Action moveLeft={moveLeft} moveRight={moveRight} />
-      <ItemList items={rightItems} />
+      <ItemList items={rightItems} handleChange={handleChange} />
     </div>
   );
 }

@@ -1,10 +1,10 @@
 import React from "react";
 
-const Action = ({ moveLeft, moveRight }) => {
+const Action = ({ moveRight, moveLeft }) => {
   return (
     <div className="button">
-      <button onClick={moveLeft}>left</button>
       <button onClick={moveRight}>right</button>
+      <button onClick={moveLeft}>left</button>
     </div>
   );
 };

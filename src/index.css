@@ -70,14 +70,14 @@ button:focus-visible {
 .card {
   border: 1px solid gray;
 }
+.label {
+  display: flex;
+}
 
 .container {
   display: flex;
 }
 
-ul {
-  padding: 0px;
-}
 li {
   text-decoration: none;
 }
